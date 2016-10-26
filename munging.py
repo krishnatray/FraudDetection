@@ -7,6 +7,15 @@ def convert_data(df):
     #need to parse previous_payouts
     df['num_previous_payouts']= [len(row) for row in df['previous_payouts']]
 
+    #Add total_cost
+    total = []
+    for row in df['ticket_types']:
+        cost= 0
+        for num in range(len(row)):
+            cost +=row[num]['cost']
+        total.append(cost)
+    df['total_cost'] = total
+
     #Remove ticket_types and previous_payours columns
     df.drop(['ticket_types', 'previous_payouts'], axis =1, inplace = True)
 
@@ -22,11 +31,8 @@ def convert_data(df):
 
     return df
 
-
-def main():
-    filepath = '../data/subset.json'
+if __name__ == '__main__':
+    filepath = '../data/data.json'
     df = pd.read_json(filepath)
     df = convert_data(df)
-
-if __name__ == '__main__':
-    main()
+    df.to_csv('../data/clean_data.csv', index = False)
