@@ -1,7 +1,7 @@
 import pandas as pd
 
 def clean_data(df):
-    df = df[['sale_duration', 'previous_payouts', 'acct_type', 'org_name', 'payout_type', 'event_created', 'approx_payout_date', 'channels', 'country', 'delivery_method', 'ticket_types', 'has_analytics', 'listed', 'num_order']]
+    df = df[['sale_duration', 'previous_payouts', 'acct_type', 'org_name', 'payout_type', 'channels', 'country', 'delivery_method', 'ticket_types', 'has_analytics', 'listed', 'num_order']]
 
     #need to parse ticket_type
     df['cost'] = pd.Series([cell[0]['cost'] for cell in df['ticket_types']])
