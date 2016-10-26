@@ -1,11 +1,8 @@
 import numpy as np
 import pandas as pd
 
-def clean_data(df):
-    df = df[['sale_duration', 'previous_payouts', 'acct_type', 'org_name', 'payout_type', 'channels', 'country', 'delivery_method', 'ticket_types', 'has_analytics', 'listed', 'num_order']]
-
-    #need to parse ticket_type
-    # df['av_cost_of_tic']=[np.mean(row[num]['cost']) for row in df['ticket_types'] for num in range(len(row))]
+def convert_data(df):
+    df = df[['sale_duration', 'previous_payouts', 'acct_type', 'channels', 'delivery_method', 'ticket_types', 'has_analytics', 'listed', 'num_order']]
 
     #need to parse previous_payouts
     df['num_previous_payouts']= [len(row) for row in df['previous_payouts']]
@@ -13,20 +10,23 @@ def clean_data(df):
     #Remove ticket_types and previous_payours columns
     df.drop(['ticket_types', 'previous_payouts'], axis =1, inplace = True)
 
-    #Make target column boolean
+    #Add Labels column and remove old labels columns
     df['fraud'] = pd.Series(['fraudster' in word for word in df['acct_type']])
     df.drop(['acct_type'], axis = 1, inplace = True)
 
     #convert listed to boolean
-    df['listed'] = [df['listed'] == 'y']
-    
+    df['listed'] = [val == 'y' for val in df['listed']]
+
+    # dummies = pd.get_dummies(df['delivery_method'], drop_first = True)
+    df.fillna(inplace = True, value = 44.66)
+
     return df
 
 
 def main():
     filepath = '../data/subset.json'
     df = pd.read_json(filepath)
-    df = clean_data(df)
+    df = convert_data(df)
 
 if __name__ == '__main__':
     main()
