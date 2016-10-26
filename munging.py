@@ -13,10 +13,13 @@ def clean_data(df):
     #Remove ticket_types and previous_payours columns
     df.drop(['ticket_types', 'previous_payouts'], axis =1, inplace = True)
 
-    #Add Labels column and remove old labels columns
+    #Make target column boolean
     df['fraud'] = pd.Series(['fraudster' in word for word in df['acct_type']])
     df.drop(['acct_type'], axis = 1, inplace = True)
 
+    #convert listed to boolean
+    df['listed'] = [df['listed'] == 'y']
+    
     return df
 
 
