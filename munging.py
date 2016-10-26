@@ -29,6 +29,7 @@ def convert_data(df):
     # dummies = pd.get_dummies(df['delivery_method'], drop_first = True)
     df.fillna(inplace = True, value = 44.66)
 
+    print "columns:", df.columns
     return df
 
 if __name__ == '__main__':
