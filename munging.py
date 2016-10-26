@@ -19,4 +19,5 @@ def clean_data(df):
 if __name__ == '__main__':
     filepath = '../data/subset.json'
     df = pd.read_json(filepath)
-    clean_data(df)
+    df = clean_data(df)
+    print df
