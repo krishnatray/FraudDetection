@@ -6,21 +6,29 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix, precision_score, recall_score
 
 def split_data(df):
+    #INPUT: data frame
+    #OUTPUT: train test split of data
     y = df.pop('fraud').values
     X = df.values
     X_train, X_test, y_train, y_test = train_test_split(X, y)
     return X_train, X_test, y_train, y_test
 
 def model_fit(X_train, X_test, y_train, y_test):
-    rf = RandomForestClassifier()
+    #INPUT: train test split data
+    #OUTPUT: random forest model (SKLearn object)
+    rf = RandomForestClassifier(n_estimators=100)
     rf.fit(X_train, y_train)
     return rf
 
 def confuse(model, X_test, y_test):
+    #INPUT: model, test data (feature THEN target)
+    #OUTPUT: confustion matrix and predicted values (y_predict)
     y_predict = model.predict(X_test)
     return confusion_matrix(y_test, y_predict), y_predict
 
 def score(model, X_test, y_test):
+    #INPUT: model, test data (feature, THEN target)
+    #OUTPUT: Accuracy
     score = model.score(X_test, y_test)
     return score
 
