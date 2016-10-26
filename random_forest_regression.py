@@ -10,6 +10,15 @@ def convert_data(df):
     #need to parse previous_payouts
     df['num_previous_payouts']= [len(row) for row in df['previous_payouts']]
 
+    #Add total_cost
+    total = []
+    for row in df['ticket_types']:
+        cost= 0
+        for num in range(len(row)):
+            cost +=row[num]['cost']
+        total.append(cost)
+    df['total_cost'] = total
+
     #Remove ticket_types and previous_payours columns
     df.drop(['ticket_types', 'previous_payouts'], axis =1, inplace = True)
 
@@ -40,6 +49,15 @@ def confuse(model, X_test, y_test):
     y_predict = model.predict(X_test)
     return confusion_matrix(y_test, y_predict), y_predict
 
+def score(model, X_test, y_test):
+    score = model.score(X_test, y_test)
+    return score
+
+# def score_df(X_costs, prediction, actual):
+#     cost_df = pd.DataFrame([X_costs], colnames='Cost')
+#     cost_df['prediction'] = prediction
+#     cost_df['actual'] = actual
+#     return cost_df
 
 def main():
     filepath = '../data/subset.json'
@@ -48,8 +66,10 @@ def main():
     X_train, X_test, y_train, y_test = split_data(df)
     model= model_fit(X_train, X_test, y_train, y_test)
     mat, y_pred = confuse(model, X_test, y_test)
-    return y_pred
+    acc = score(model, X_test, y_test)
+    return y_pred, X_test, y_test, mat, acc
 
 
 if __name__ == "__main__":
-    y_pred = main()
+    y_pred, X_test, y_test, mat, acc = main()
+    print "Accuracy:", acc
